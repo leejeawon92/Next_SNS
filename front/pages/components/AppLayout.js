@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 
 function AppLayout({ children }) {
 
   return (
     <div>
       <div>
-        aaaaa
+        <Link href='/'><a>홈</a></Link>
+        <Link href='/profile'><a>프로필</a></Link>
+        <Link href='/signup'><a>회원가입</a></Link>
         {children}
       </div>
     </div>

@@ -3,7 +3,7 @@ import AppLayout from './components/AppLayout';
 
 const Home = () => {
   return (
-    <AppLayout>셋업중</AppLayout>
+    <AppLayout><div>셋업중</div></AppLayout>
   )
 }
 
