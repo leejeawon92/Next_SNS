@@ -1,9 +1,15 @@
 import React from 'react';
-import AppLayout from './components/AppLayout';
+import Head from 'next/head';
+import AppLayout from '../components/AppLayout';
 
 const Profile  = () => {
   return (
-    <AppLayout><div>프로필페이지</div></AppLayout>
+    <>
+    <Head>
+      <title>내 프로필 | SNS </title>
+    </Head>
+    <AppLayout><div>회원가입페이지</div></AppLayout>
+    </>
   )
 }
 
