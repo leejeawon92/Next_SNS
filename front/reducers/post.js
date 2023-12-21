@@ -5,7 +5,7 @@ export const initialState = {
       id: 1,
       nickname: 'jeawon',
     },
-    content: '첫 번째 게시글',
+    content: '첫 번째 게시글 #first #첫번째 # 첫번째',
     Images: [{
       src: 'https://images.unsplash.com/photo-1581196607303-95c00f31c676?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fCVFQSVCMiVBOCVFQyU5QSVCOHxlbnwwfHwwfHx8MA%3D%3D',
     }, {
