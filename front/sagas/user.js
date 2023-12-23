@@ -11,10 +11,10 @@ function logOutAPI(){
 function* logIn(action){
   try {
     // const result = yield call(logInAPI, action.data) // 서버로 로그인에 관련된 요청(logInAPI)을 보내는 API를 따로 빼고 그에 따른 결과값을 전달받는다. 
-    yield delay(1000)
+    yield delay(1000);
     yield put({                         // logInAPI의 결과값이 실패냐 성공이냐에 따라 결과값이 달라진다.
       type: 'LOG_IN_SUCCESS',
-      data: result.data
+      data: action.data
     }) 
   } catch (err) {
     yield put({

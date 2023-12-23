@@ -8,68 +8,105 @@ const dummyUser = {
 
 export const initialState = {
   isLoggedIn: false,
+  isLoggingIn: false,
+  isLoggingOut: false,
   user: null,
-  signUpData: {},
-  loginData: {},
 };
 
-export const SIGN_UP = 'SIGN_UP';
-export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
-export const LOG_IN = 'LOG_IN'; 
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST'; 
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS'; 
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE'; 
-export const LOG_OUT = 'LOG_OUT';
+export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
+export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS'; 
+export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE'; 
 
-export const signUpAction = (data) => {
-  return {
-    type: SIGN_UP,
-    data,
-  };
-};
 
-export const signUpSuccess = {
-  type: SIGN_UP_SUCCESS,
-};
-
-export const loginAction = (data) => {
+export const loginRequestAction = (data) => {
   return {
-    type: LOG_IN,
-    data,
-  }
-};
-export const logoutAction = {
-  type: LOG_OUT,
-};
-export const signUp = (data) => {
-  return {
-    type: SIGN_UP,
+    type: LOG_IN_REQUEST,
     data,
   }
 };
 
-export default (state = initialState, action) => {
+export const loginSuccessAction = (data) => {
+  return {
+    type: LOG_IN_SUCCESS,
+    data,
+  }
+};
+
+export const loginFailureAction = (data) => {
+  return {
+    type: LOG_IN_FAILURE,
+    data,
+  }
+};
+
+export const logoutRequestAction = (data) => {
+  return {
+    type: LOG_OUT_REQUEST,
+    data,
+  }
+};
+
+export const logoutSuccessAction = (data) => {
+  return {
+    type: LOG_OUT_SUCCESS,
+    data,
+  }
+};
+
+export const logoutFailureAction = (data) => {
+  return {
+    type: LOG_OUT_FAILURE,
+    data,
+  }
+};
+
+
+const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOG_IN: {
+    case LOG_IN_REQUEST: 
       return {
         ...state,
         isLoggedIn: true,
-        user: dummyUser,
-        loginData: action.data,
       };
-    }
-    case LOG_OUT: {
+    
+    case LOG_IN_SUCCESS: 
+      return {
+        ...state,
+        isLoggingIn: false,
+        isLoggedIn: true,
+        user: {...action.data, nickname: 'JW'},
+      };
+    
+    case LOG_IN_FAILURE: 
       return {
         ...state,
         isLoggedIn: false,
-        user: null,
+        isLoggedIn: false
       };
-    }
-    case SIGN_UP: {
+    
+    case LOG_OUT_REQUEST: 
       return {
         ...state,
-        signUpData: action.data,
+        isLoggingOut: true,
       };
-    }
+    
+    case LOG_OUT_SUCCESS: 
+      return {
+        ...state, 
+        isLoggingOut: false,
+        isLoggedIn: false,
+        user: null,
+      };
+    
+    case LOG_OUT_FAILURE: 
+      return {
+        ...state,
+        isLoggingOut: false,
+      };
+
     default: {
       return {
         ...state,
@@ -77,3 +114,4 @@ export default (state = initialState, action) => {
     }
   }
 };
+export default reducer;
