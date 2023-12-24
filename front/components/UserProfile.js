@@ -16,7 +16,7 @@ const UserProfile  = () => {
       <div key='followings'>팔로워<br/>0</div>,
       <div key='followings'>팔로잉<br/>0</div>
     ]}>
-      <Card.Meta avatar={<Avatar>{user.nickname[0]}</Avatar>} title={user.nickname} />
+      <Card.Meta avatar={<Avatar>{user?.nickname[0]}</Avatar>} title={user?.nickname} />
       <Button onClick={onLogOut} loading={isLoggingOut}>로그아웃</Button>
     </Card>
 
