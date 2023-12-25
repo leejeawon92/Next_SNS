@@ -12,21 +12,21 @@ const ButtonWrapper = styled.div`
 
 const LoginForm  = () => {
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  const {isLoggingIn} = useSelector((state)=> state.user);
+  const {logInLoading} = useSelector((state)=> state.user);
 
   const onSubmitForm = useCallback((e) => {
-    dispatch(loginRequestAction({id, password}));
-  },[id, password])
+    dispatch(loginRequestAction({email, password}));
+  },[email, password])
 
   return (
     <Form onFinish={onSubmitForm}>
       <div>
-        <label htmlFor ='user-id'>아이디</label>
+        <label htmlFor ='user-id'>이메일</label>
         <br/>
-        <Input name='user-id' value={id} onChange={onChangeId} required />
+        <Input name='user-id' type='email' value={email} onChange={onChangeEmail} required />
       </div>
       <div>
         <label htmlFor ='user-password'>비밀번호</label>
@@ -34,7 +34,7 @@ const LoginForm  = () => {
         <Input name='user-id' value={password} onChange={onChangePassword} required />        
       </div>
       <ButtonWrapper>
-        <Button type='primary' htmlType='submit' loading={isLoggingIn}>로그인</Button>
+        <Button type='primary' htmlType='submit' loading={logInLoading}>로그인</Button>
         <Link href='/signup'><a><Button>회원가입</Button></a></Link>
       </ButtonWrapper>
     </Form>
