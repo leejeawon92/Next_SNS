@@ -7,7 +7,7 @@ import PostCard from '../components/PostCard';
 const Home = () => {
   const { me } = useSelector((state)=> state.user);
   const { mainPosts } = useSelector((state)=> state.post);
-
+  console.log(mainPosts);
   return (
     <AppLayout>
       {me && <PostForm />}

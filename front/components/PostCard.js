@@ -55,7 +55,7 @@ const PostCard = ({post}) => {
           <List
             header={`${post.Comments.length}개의 댓글`}
             itemLayout='horizontal'
-            dataSource={post.Comments}
+            dataSource={post.Comments || []}
             renderItem={(item)=> (
               <List.Item>
                 <List.Item.Meta
@@ -66,9 +66,31 @@ const PostCard = ({post}) => {
               </List.Item>
             )}
           />
-
         </div>
       )}
+      {/* {commentFormOpend && (
+        <div>
+          <CommentForm post={post} />
+          <List
+            header={`${post.Comments.length}개의 댓글`}
+            itemLayout='horizontal'
+            dataSource={post.Comments || []}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  author={item.User.nickname}
+                  avatar={(
+                    <Link href={`/user/${item.User.id}`} prefetch={false}>
+                      <Avatar>{item.User.nickname[0]}</Avatar>
+                    </Link>
+                  )}
+                  content={item.content}
+                />
+              </li>
+            )}
+          />
+        </div>
+      )} */}
     </div>
   )
 }

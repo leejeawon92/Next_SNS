@@ -39,7 +39,7 @@ const PostForm = () =>{
         <input type='file' multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type='primary' style={{float: 'rigth'}} htmlType='submit' loading={addPostLoading}>작성</Button>
-      </div>a
+      </div>
       <div>
         {imagePaths.map((v)=> {
           <div key={v} style={{display: 'inline-block'}}>
