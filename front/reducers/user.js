@@ -47,6 +47,9 @@ export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS'; 
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE'; 
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS'; 
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE'; 
 
 
 export const loginRequestAction = (data) => {
@@ -77,7 +80,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         logInLoading: false,
         logInDone: true,
-        user: dummyUser(action.data),
+        me: dummyUser(action.data),
       };
     case LOG_IN_FAILURE: 
       return {
@@ -128,6 +131,28 @@ const reducer = (state = initialState, action) => {
         ...state,
         signUpLoading: false,
         signUpError: action.error
+      };
+
+
+    case CHANGE_NICKNAME_REQUEST: 
+      return {
+        ...state,
+        Loading: true,
+        Done: false,
+        Error: null,
+      };    
+    case CHANGE_NICKNAME_SUCCESS: 
+      return {
+        ...state, 
+        Loading: false,
+        Done: true,
+        me: null,
+      };    
+    case CHANGE_NICKNAME_FAILURE: 
+      return {
+        ...state,
+        Loading: false,
+        Error: action.error
       };
 
 

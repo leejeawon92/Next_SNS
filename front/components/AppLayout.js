@@ -13,6 +13,7 @@ const SearchInput = styled(Input.Search)`
 
 function AppLayout({ children }) {
   const {me} = useSelector((state)=> state.user);
+  console.log(me);
   return (
     <div>
       <Menu mode='horizontal'>

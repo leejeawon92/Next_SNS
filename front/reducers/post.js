@@ -1,3 +1,5 @@
+import shortId from 'shortid';
+
 export const initialState = {
   mainPosts: [{
     id: 1,
@@ -29,18 +31,21 @@ export const initialState = {
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
 };
 
-const dummyPost = {
-  id: 2,
-  content: '더미데이터입니다.',
+const dummyPost = (data) => ({
+  id: shortId.generate(),
+  content: data,
   User: {
     id: 1,
     nickname: 'JW',
   },
   Images: [],
   Comments: [],
-};
+});
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -52,28 +57,30 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
-  data: data
+  data
 })
 
 export const addComment = (data) => ({
   type: ADD_COMMENT_REQUEST,
-  data: data
+  data
 })
 
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST_REQUEST:
+      console.log("REDUCER: ADD_POST_REQUEST");
       return {
         ...state,
         addPostLoading: true,
         addPostDone: false,
         addPostError: null,
-      }
-    case ADD_POST_SUCCESS: 
+      };
+    case ADD_POST_SUCCESS:
+      console.log("REDUCER: ADD_POST_SUCCESS");
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [dummyPost(action.data), ...state.mainPosts],
         addPostLoading: false,
         addPostDone: true,
       };

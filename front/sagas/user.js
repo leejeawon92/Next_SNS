@@ -56,8 +56,7 @@ function* signUp(){
       error: err.response.data
     }) 
   }
-}v
-
+}
 
 function* watchLogIn(){
   yield takeLatest(LOG_IN_REQUEST, logIn)  
