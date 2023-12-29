@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
 import NicknameEditForm from '../components/NicknameEditForm';
 import FollowList from '../components/FollowList';
 import { useSelector } from 'react-redux';
+import Router from 'next/router';
 
 const Profile  = () => {
-  const {me} = useSelector((state)=> state.user)
+  const {me} = useSelector((state)=> state.user);
+
+  useEffect(() => {
+    if (!(me && me.id)) {  // 로그인 안한채로 프로필페이지 갈때
+      Router.push('/');
+    }
+  }, [me && me.id]);
+  if (!me) {
+    return null;
+  }
 
   return (
     <>
