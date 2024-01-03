@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     collate: 'utf8_general_ci', // 한글+이모티콘
 
   })
-  Image.associate = (db)=> {};
+  Image.associate = (db)=> {
+    db.Image.hansMany(db.Post); // post에는 image가 속해있다
+  };
   return Image;
 }
