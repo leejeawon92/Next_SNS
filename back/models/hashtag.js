@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
   })
   Hashtag.associate = (db)=> {
-    db.Hashtag.belongsToMany(db.Post); // 해시태그는 여러개의 post를 가진다. (다대다 관계)
+    db.Hashtag.belongsToMany(db.Post, {through: 'PostHashtag'}); // 해시태그는 여러개의 post를 가진다. (다대다 관계)
   };
   return Hashtag;
 }

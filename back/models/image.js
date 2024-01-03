@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
   })
   Image.associate = (db)=> {
-    db.Image.hansMany(db.Post); // post에는 image가 속해있다
+    db.Image.hasMany(db.Post); // post에는 image가 속해있다
   };
   return Image;
 }
