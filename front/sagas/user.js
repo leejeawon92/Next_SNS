@@ -3,19 +3,14 @@ import axios from 'axios';
 import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from '../reducers/user';
 
 function logInAPI(data){
-  return axios.post('/api/login', data); // 실제 서버에 요청을 보낸다.
+  return axios.post('/user/login', data); // 실제 서버에 요청을 보낸다.
 }
-function logOutAPI(){
-  return axios.post('/api/logout'); 
-}
-
 function* logIn(action){
   try {
-    // const result = yield call(logInAPI, action.data) // 서버로 로그인에 관련된 요청(logInAPI)을 보내는 API를 따로 빼고 그에 따른 결과값을 전달받는다. 
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data); // 서버로 로그인에 관련된 요청(logInAPI)을 보내는 API를 따로 빼고 그에 따른 결과값을 전달받는다. 
     yield put({                         // logInAPI의 결과값이 실패냐 성공이냐에 따라 결과값이 달라진다.
       type: LOG_IN_SUCCESS,
-      data: action.data
+      data: result.data
     }) 
   } catch (err) {
     yield put({
@@ -25,6 +20,11 @@ function* logIn(action){
   }
 }
 
+
+
+function logOutAPI(){
+  return axios.post('/api/logout'); 
+}
 function* logOut(){
   try {
     // const result = yield call(logOutAPI)
@@ -40,8 +40,10 @@ function* logOut(){
   }
 }
 
+
+
 function signUpAPI(data){
-  return axios.post('http://localhost:3065/user', data); 
+  return axios.post('/user', data); 
 }
 function* signUp(action){
   try {
@@ -58,10 +60,11 @@ function* signUp(action){
   }
 }
 
+
+
 function followAPI() {
   return axios.post('/api/follow');
 }
-
 function* follow(action) {
   try {
     // const result = yield call(followAPI);
@@ -79,10 +82,11 @@ function* follow(action) {
   }
 }
 
+
+
 function unfollowAPI() {
   return axios.post('/api/unfollow');
 }
-
 function* unfollow(action) {
   try {
     // const result = yield call(unfollowAPI);
@@ -99,6 +103,8 @@ function* unfollow(action) {
     });
   }
 }
+
+
 
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
@@ -118,6 +124,8 @@ function* watchLogOut(){
 function* watchSignUp(){
   yield takeLatest(SIGN_UP_REQUEST, signUp)
 }
+
+
 
 export default function* userSaga(){
   yield all([
