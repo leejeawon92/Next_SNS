@@ -1,8 +1,9 @@
 const express = require('express');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
-const db = require('./models')
+const db = require('./models');
 const app = express();
+const cors = require('cors');
 
 db.sequelize.sync()
   .then(()=>{
@@ -10,7 +11,7 @@ db.sequelize.sync()
   })
   .catch(console.error)
 
-
+app.use(cors({origin: '*'}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
