@@ -1,5 +1,5 @@
 const express = require('express');
-const {User} = require('../models');
+const {User, Post} = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const router = express.Router();
@@ -18,7 +18,22 @@ router.post('/login', (req, res, next)=>{ // POST /user/login
         console.error(loginErr);
         return next(loginErr);
       }
-      return res.status(200).json(user);
+      const fullUserWithoutPassword = await User.findOne({ // 패스워드정보를 뺀 유저정보
+        where: { id: user.id },
+        attributes: {
+          exclude: ['password']  // 비밀번호를 빼겠다
+        },
+        include: [{
+          model: Post,
+        }, {
+          model: User,
+          as: 'Followings',
+        }, {
+          model: User,
+          as: 'Followers',
+        }]
+      })
+      return res.status(200).json(fullUserWithoutPassword);
     })
   })(req,res, next) // 미들웨어 확장방법
 });  

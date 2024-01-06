@@ -15,7 +15,7 @@ module.exports= ()=>{
       if(!user){
         return done(null, false, {reason: '존재하지 않는 이메일입니다.'}) // 첫번쩨: 서버에러 , 두번째: 성공, 세번째: 클라이언트에러
       }
-      const result = await bcrypt.compare(passport, user.password); // DB에 저장된 pw와 사용자가 입력한 pw 비교
+      const result = await bcrypt.compare(password, user.password); // DB에 저장된 pw와 사용자가 입력한 pw 비교
       if(result){
         return done(null, user); // 이메일존재, 비번일치하면 로그인 성공임으로 사용자정보를 보낸다
       }
