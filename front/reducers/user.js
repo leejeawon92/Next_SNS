@@ -31,16 +31,6 @@ export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
-
-const dummyUser = (data) => ({
-  ...data,
-  nickname: 'jw',
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [{ nickname: 'JW2' }, { nickname: 'Dice11' }, { nickname: 'Dice33' }],
-  Followers: [{ nickname: 'JW3' }, { nickname: 'Dice22' }, { nickname: 'Dice44' }],
-});
-
 export const initialState = {
   loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
   loadMyInfoDone: false,
@@ -75,10 +65,9 @@ export const loginRequestAction = (data) => {
   }
 };
 
-export const logoutRequestAction = (data) => {
+export const logoutRequestAction = () => {
   return {
     type: LOG_OUT_REQUEST,
-    data,
   }
 };
 

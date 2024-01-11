@@ -1,5 +1,6 @@
 const express = require('express');
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 const db = require('./models');
 const app = express();
@@ -9,6 +10,9 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+
+app.use(morgan('dev'));
 
 db.sequelize.sync()
 .then(()=>{
@@ -34,11 +38,14 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
 app.get('/', (req,res)=>{
   res.send('Home페이지')
 })
 
 app.use('/post',postRouter);
+app.use('/posts',postsRouter);
 app.use('/user',userRouter);
 
 app.listen(3065, ()=>{

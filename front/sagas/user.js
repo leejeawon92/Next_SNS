@@ -1,6 +1,13 @@
 import { all, call, delay, fork, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from '../reducers/user';
+import { 
+  FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, 
+  LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, 
+  LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, 
+  LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, 
+  SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, 
+  UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS 
+} from '../reducers/user';
 
 function logInAPI(data){
   return axios.post('/user/login', data); // 실제 서버에 요청을 보낸다.
@@ -27,8 +34,7 @@ function logOutAPI(){
 }
 function* logOut(){
   try {
-    yield call(logOutAPI)
-    yield delay(1000)
+    yield call(logOutAPI);
     yield put({                         
       type: LOG_OUT_SUCCESS,
     }) 

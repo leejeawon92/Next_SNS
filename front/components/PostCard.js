@@ -28,6 +28,7 @@ const PostCard = ({post}) => {
       data: post.id,
     })
   },[])
+  console.log(post.User);
   
   return(
     <div>
@@ -107,6 +108,16 @@ const PostCard = ({post}) => {
   )
 }
 PostCard.propTypes = {
-  post: PropTypes.object.isRequired
-}
+  post: PropTypes.shape({
+    id: PropTypes.number,
+    User: PropTypes.object,
+    content: PropTypes.string,
+    createdAt: PropTypes.string,
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
+  }).isRequired,
+};
 export default PostCard;

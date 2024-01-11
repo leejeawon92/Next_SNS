@@ -1,6 +1,4 @@
-import shortid from 'shortid';
 import {produce} from 'immer';
-import { faker } from '@faker-js/faker';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -35,46 +33,6 @@ export const initialState = {
   removePostDone: false,
   removePostError: null,
 };
-
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: 'JW',
-  },
-  Images: [],
-  Comments: [],
-});
-
-const dummyComment = (data) => ({
-  id: shortid.generate(),
-  content: data,
-  User: {
-    id: 1,
-    nickname: 'JW',
-  },
-});
-
-export const generateDummyPost = (number) => Array(number).fill().map(() => ({
-  id: shortid.generate(),
-  User: {
-    id: shortid.generate(),
-    nickname: faker.internet.userName(),
-  },
-  content: faker.lorem.paragraph(),
-  Images: [{
-    src: faker.image.url(),
-  }],
-  Comments: [{
-    User: {
-      id: shortid.generate(),
-      nickname: faker.internet.userName(),
-    },
-    content: faker.lorem.sentence(),
-  }],
-}));
-
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,

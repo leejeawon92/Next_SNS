@@ -99,10 +99,15 @@ router.post('/', isNotLoggedIn ,async (req, res, next)=>{ // POST /user/
   }
 })
 
-router.post('/logout',isLoggedIn ,(req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.send('로그아웃 성공');
+router.post('/logout', isLoggedIn ,(req, res, next) => {
+  req.logOut(err => {
+    if (err) {
+      return next(err);
+    } else {
+      console.log('로그아웃됨.');
+      res.redirect('/');
+    }
+  });
 });
 
 module.exports = router;
