@@ -6,18 +6,36 @@ import PostImages from './PostImages';
 import { useCallback, useState } from 'react';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 
 const PostCard = ({post}) => {
   const dispatch = useDispatch();
   const {removePostLoading} = useSelector((state)=> state.post);
-  const [liked, setLiked] = useState(false);
   const [commentFormOpend, setcommentFormOpend] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
-  const onToggleLike = useCallback(()=>{
-    setLiked((prev) => !prev);
-  },[])
+  const liked = post.Likers.find((v)=> v.id === id);
+
+  const onLike = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
+
+  const onUnlike = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
+
   const onToggleComment = useCallback(()=>{
     setcommentFormOpend((prev) => !prev);
   },[])
@@ -28,15 +46,17 @@ const PostCard = ({post}) => {
       data: post.id,
     })
   },[])
-  console.log(post.User);
   
+    
   return(
     <div>
       <Card 
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key='retweet' />,
-          liked ? <HeartTwoTone key='heart' twoToneColor='#eb2f96' onClick={onToggleLike} /> : <HeartOutlined key='heart' onClick={onToggleLike} /> ,
+          liked 
+            ? <HeartTwoTone key='heart' twoToneColor='#eb2f96' onClick={onUnlike} /> 
+            : <HeartOutlined key='heart' onClick={onLike} /> ,
           <MessageOutlined key='comment' onClick={onToggleComment} />,
           <Popover 
             key='more' 
