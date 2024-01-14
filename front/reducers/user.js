@@ -81,7 +81,7 @@ export default (state = initialState, action) => {
         break;
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
-        draft.me.Followings.push({ id: action.data });
+        draft.me.Followings.push({ id: action.data.UserId });
         draft.followDone = true;
         break;
       case FOLLOW_FAILURE:
@@ -97,7 +97,7 @@ export default (state = initialState, action) => {
         break;
       case UNFOLLOW_SUCCESS:
         draft.unfollowLoading = false;
-        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data.UserId);
         draft.unfollowDone = true;
         break;
       case UNFOLLOW_FAILURE:

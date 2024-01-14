@@ -5,7 +5,7 @@ const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
-
+// =======================================================================================
 router.get('/', async (req, res, next) => { // GET /user
   try {
     if (req.user) {
@@ -36,6 +36,7 @@ router.get('/', async (req, res, next) => { // GET /user
     next(error);
   }
 });
+// =======================================================================================
 
 router.post('/login', isNotLoggedIn ,(req, res, next)=>{ // POST /user/login
   passport.authenticate('local', (err, user, info)=>{  
@@ -73,6 +74,7 @@ router.post('/login', isNotLoggedIn ,(req, res, next)=>{ // POST /user/login
     })
   })(req,res, next) // 미들웨어 확장방법
 });  
+// =======================================================================================
 
 router.post('/', isNotLoggedIn ,async (req, res, next)=>{ // POST /user/
   try{
@@ -98,6 +100,7 @@ router.post('/', isNotLoggedIn ,async (req, res, next)=>{ // POST /user/
     next(error); // next를 통해 브러우저로 error통보 = status 500
   }
 })
+// =======================================================================================
 
 router.post('/logout', isLoggedIn ,(req, res, next) => {
   req.logOut(err => {
@@ -109,6 +112,7 @@ router.post('/logout', isLoggedIn ,(req, res, next) => {
     }
   });
 });
+// =======================================================================================
 
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   try {
@@ -118,6 +122,36 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
       where: { id: req.user.id },
     });
     res.status(200).json({ nickname: req.body.nickname });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// =======================================================================================
+
+router.patch('/:userId/follow', isLoggedIn, async (req, res, next) => { // PATCH /user/x/follow
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId }});
+    if (!user) {
+      res.status(403).send('존재하지 않는 사용자를 follow 할 수 없습니다.');
+    }
+    await user.addFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// =======================================================================================
+
+router.delete('/:userId/follow', isLoggedIn, async (req, res, next) => { // DELETE /user/x/follow
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId }});
+    if (!user) {
+      res.status(403).send('존재하지 않는 사용자를 unfollow 할 수 없습니다.');
+    }
+    await user.removeFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
   } catch (error) {
     console.error(error);
     next(error);
