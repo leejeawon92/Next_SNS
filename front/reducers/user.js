@@ -31,6 +31,15 @@ export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
+
 export const initialState = {
   loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
   loadMyInfoDone: false,
@@ -53,6 +62,12 @@ export const initialState = {
   changeNicknameLoading: false, // 닉네임 변경 시도중
   changeNicknameDone: false,
   changeNicknameError: null,
+  loadFollowingsLoading: false,  // 팔로잉 목록 시도중
+  loadFollowingsDone: false,
+  loadFollowingsError: null,
+  loadFollowersLoading: false, // 팔로워 목록 시도중
+  loadFollowersDone: false,
+  loadFollowersError: null,
   me: null,
   signUpData: {},
   loginData: {},
@@ -184,6 +199,37 @@ export default (state = initialState, action) => {
         draft.loadMyInfoError = action.error;
         break;
 
+      case LOAD_FOLLOWINGS_REQUEST:
+        draft.loadFollowingsLoading = true;
+        draft.loadFollowingsError = null;
+        draft.loadFollowingsDone = false;
+        break;
+      case LOAD_FOLLOWINGS_SUCCESS:
+        draft.loadFollowingsLoading = false;
+        draft.me.Followings = action.data;
+        draft.loadFollowingsDone = true;
+        break;
+      case LOAD_FOLLOWINGS_FAILURE:
+        draft.loadFollowingsLoading = false;
+        draft.loadFollowingsError = action.error;
+        break;
+
+
+      case LOAD_FOLLOWERS_REQUEST:
+        draft.loadFollowersLoading = true;
+        draft.loadFollowersError = null;
+        draft.loadFollowersDone = false;
+        break;
+      case LOAD_FOLLOWERS_SUCCESS:
+        draft.loadFollowersLoading = false;
+        draft.me.Followers = action.data;
+        draft.loadFollowersDone = true;
+        break;
+      case LOAD_FOLLOWERS_FAILURE:
+        draft.loadFollowersLoading = false;
+        draft.loadFollowersError = action.error;
+        break;
+
 
       case ADD_POST_TO_ME:
         draft.me.Posts.unshift({ id: action.data });
@@ -200,119 +246,3 @@ export default (state = initialState, action) => {
     }
   });
 } 
-// const reducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case LOG_IN_REQUEST: 
-//       return {
-//         ...state,
-//         logInLoading: true,
-//         logInError: null,
-//         logInDone: false,
-//       };
-//     case LOG_IN_SUCCESS: 
-//       return {
-//         ...state,
-//         logInLoading: false,
-//         logInDone: true,
-//         me: dummyUser(action.data),
-//       };
-//     case LOG_IN_FAILURE: 
-//       return {
-//         ...state,
-//         logInLoading: false,
-//         logInError: action.error
-//       };
-    
-
-//     case LOG_OUT_REQUEST: 
-//       return {
-//         ...state,
-//         logOutLoading: true,
-//         logOutDone: false,
-//         logOutError: null,
-//       };    
-//     case LOG_OUT_SUCCESS: 
-//       return {
-//         ...state, 
-//         logOutLoading: false,
-//         logOutDone: true,
-//         me: null,
-//       };    
-//     case LOG_OUT_FAILURE: 
-//       return {
-//         ...state,
-//         logOutLoading: false,
-//         logOutError: action.error
-//       };
-
-
-//     case SIGN_UP_REQUEST: 
-//       return {
-//         ...state,
-//         signUpLoading: true,
-//         signUpDone: false,
-//         signUpError: null,
-//       };    
-//     case SIGN_UP_SUCCESS: 
-//       return {
-//         ...state, 
-//         signUpLoading: false,
-//         signUpDone: true,
-//         me: null,
-//       };    
-//     case SIGN_UP_FAILURE: 
-//       return {
-//         ...state,
-//         signUpLoading: false,
-//         signUpError: action.error
-//       };
-
-
-//     case CHANGE_NICKNAME_REQUEST: 
-//       return {
-//         ...state,
-//         Loading: true,
-//         Done: false,
-//         Error: null,
-//       };    
-//     case CHANGE_NICKNAME_SUCCESS: 
-//       return {
-//         ...state, 
-//         Loading: false,
-//         Done: true,
-//         me: null,
-//       };    
-//     case CHANGE_NICKNAME_FAILURE: 
-//       return {
-//         ...state,
-//         Loading: false,
-//         Error: action.error
-//       };
-
-//     case ADD_POST_TO_ME:
-//       return {
-//         ...state,
-//         me: {
-//           ...state.me,
-//           Posts: [{ id: action.data }, ...state.me.Posts],
-//         },
-//       };
-
-//     case REMOVE_POST_OF_ME:
-//       return {
-//         ...state,
-//         me: {
-//           ...state.me,
-//           Posts: state.me.Posts.filter((v) => v.id !== action.data),
-//         },
-//       };
-
-
-//     default: {
-//       return {
-//         ...state,
-//       }
-//     }
-//   }
-// };
-// export default reducer;
