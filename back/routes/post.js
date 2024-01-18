@@ -1,8 +1,13 @@
 const express = require('express');
 const {Post, Comment, Image, User} = require('../models');
 const {isLoggedIn} = require('./middlewares');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
 
 const router = express.Router();
+//===================================================================================================
 
 router.post('/', isLoggedIn ,async(req, res, next)=>{  // POST /post
   try{
@@ -36,6 +41,7 @@ router.post('/', isLoggedIn ,async(req, res, next)=>{  // POST /post
     next(error);
   }
 })
+//===================================================================================================
 
 router.post('/:postId/comment',isLoggedIn ,async(req, res, next)=>{  // POST /post/x/comment
   try{
@@ -63,6 +69,7 @@ router.post('/:postId/comment',isLoggedIn ,async(req, res, next)=>{  // POST /po
     next(error);
   }
 })
+//===================================================================================================
 
 router.patch('/:postId/like', isLoggedIn, async (req, res, next) => { // PATCH /post/x/like
   try {
@@ -77,6 +84,7 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => { // PATCH /
     next(error);
   }
 });
+//===================================================================================================
 
 router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE /post/x/like
   try {
@@ -91,7 +99,7 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE
     next(error);
   }
 });
-
+//===================================================================================================
 
 router.delete('/:postId', isLoggedIn, async (req, res, next) => { // DELETE /post/x
   try {
@@ -107,5 +115,35 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => { // DELETE /pos
     next(error);
   }
 });
+//===================================================================================================
+
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('uploads 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+const upload = multer({
+  storage: multer.diskStorage({ // 어디다가 저장할 것인가(diskStorage=하드디스크)
+    destination(req, file, done) {
+      done(null, 'uploads'); // uploads라는 폴더에 저장할 것이다
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname); // 확장자 추출
+      const basename = path.basename(file.originalname, ext); // 파일명 추출
+      done(null, basename + '_' + new Date().getTime() + ext); // 파일명완성본: "파일명+날짜.png"
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 파일크기 제한: 20MB
+});
+
+router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => { // POST /post/images
+  console.log(req.files);
+  res.json(req.files.map((v) => v.filename));
+});
+
+
+
 
 module.exports = router;

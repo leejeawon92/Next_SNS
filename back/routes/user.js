@@ -5,6 +5,7 @@ const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
+
 // =======================================================================================
 router.get('/', async (req, res, next) => { // GET /user
   try {
@@ -202,6 +203,5 @@ router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/f
     next(error);
   }
 });
-
 
 module.exports = router;

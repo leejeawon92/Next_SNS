@@ -1,5 +1,27 @@
 import { all, call, delay, fork, put, takeLatest, throttle } from 'redux-saga/effects';
-import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LOAD_POSTS_FAILURE, LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS } from '../reducers/post';
+import { 
+  ADD_COMMENT_FAILURE, 
+  ADD_COMMENT_REQUEST, 
+  ADD_COMMENT_SUCCESS, 
+  ADD_POST_FAILURE, 
+  ADD_POST_REQUEST, 
+  ADD_POST_SUCCESS, 
+  LIKE_POST_FAILURE, 
+  LIKE_POST_REQUEST, 
+  LIKE_POST_SUCCESS, 
+  LOAD_POSTS_FAILURE, 
+  LOAD_POSTS_REQUEST, 
+  LOAD_POSTS_SUCCESS, 
+  REMOVE_POST_FAILURE, 
+  REMOVE_POST_REQUEST, 
+  REMOVE_POST_SUCCESS, 
+  UNLIKE_POST_FAILURE, 
+  UNLIKE_POST_REQUEST, 
+  UNLIKE_POST_SUCCESS, 
+  UPLOAD_IMAGES_FAILURE, 
+  UPLOAD_IMAGES_REQUEST, 
+  UPLOAD_IMAGES_SUCCESS
+} from '../reducers/post';
 import axios from 'axios';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
@@ -133,6 +155,27 @@ function* unlikePost(action) {
 }
 
 
+
+function uploadImagesAPI(data) {
+  return axios.post('/post/images', data);
+}
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+
 function* watchLoadPosts() {
   yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
@@ -157,6 +200,10 @@ function* watchUnlikePost() {
   yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
 }
 
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 
 export default function* postSaga() {
     yield all ([
@@ -166,5 +213,6 @@ export default function* postSaga() {
       fork(watchRemovePost),
       fork(watchLikePost),
       fork(watchUnlikePost),
+      fork(watchUploadImages),
     ])
 }
