@@ -2,7 +2,7 @@ import { Button, Form, Input } from 'antd';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
-import { REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST, addPost } from '../reducers/post';
+import { ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST, addPost } from '../reducers/post';
 
 const PostForm = () =>{
   const {imagePaths, addPostDone} = useSelector((state)=> state.post);
@@ -16,9 +16,22 @@ const PostForm = () =>{
     }
   },[addPostDone])
 
-  const onSubmit = useCallback(()=>{
-    dispatch(addPost(text));
-  },[text])
+  const onSubmit = useCallback(() => {
+    if (!text || !text.trim()) {
+      return alert('게시글을 작성하세요.');
+    }
+
+    const formData = new FormData();
+    imagePaths.forEach((p) => {
+      formData.append('image', p);
+    });
+    formData.append('content', text);
+
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData,
+    });
+  }, [text, imagePaths]);
 
   // const onSubmit = useCallback(() => {
   //   dispatch({

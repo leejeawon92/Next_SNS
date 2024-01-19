@@ -7,14 +7,40 @@ const fs = require('fs');
 
 
 const router = express.Router();
+
+
+const upload = multer({
+  storage: multer.diskStorage({ // 어디다가 저장할 것인가(diskStorage=하드디스크)
+    destination(req, file, done) {
+      done(null, 'uploads'); // uploads라는 폴더에 저장할 것이다
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname); // 확장자 추출
+      const basename = path.basename(file.originalname, ext); // 파일명 추출
+      done(null, basename + '_' + new Date().getTime() + ext); // 파일명완성본: "파일명+날짜.png"
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 파일크기 제한: 20MB
+});
+
 //===================================================================================================
 
-router.post('/', isLoggedIn ,async(req, res, next)=>{  // POST /post
+router.post('/', isLoggedIn, upload.none(), async(req, res, next)=>{  // POST /post
   try{
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) { // 이미지가 있는 경우
+      if (Array.isArray(req.body.image)) { // 이미지를 여러 개 올리게 되면 req.body.image가 "[이미지1.png, 이미지2.png]" 형태로 만들어진다.
+        const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
+        await post.addImages(images);
+
+      } else { // 이미지를 하나만 올리게 되면 req.body.image가 "이미지.png" 형태가 된다.
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
       where: {id: post.id},
       include: [{
@@ -123,21 +149,6 @@ try {
   console.log('uploads 폴더가 없으므로 생성합니다.');
   fs.mkdirSync('uploads');
 }
-
-const upload = multer({
-  storage: multer.diskStorage({ // 어디다가 저장할 것인가(diskStorage=하드디스크)
-    destination(req, file, done) {
-      done(null, 'uploads'); // uploads라는 폴더에 저장할 것이다
-    },
-    filename(req, file, done) {
-      const ext = path.extname(file.originalname); // 확장자 추출
-      const basename = path.basename(file.originalname, ext); // 파일명 추출
-      done(null, basename + '_' + new Date().getTime() + ext); // 파일명완성본: "파일명+날짜.png"
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 파일크기 제한: 20MB
-});
-
 router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => { // POST /post/images
   console.log(req.files);
   res.json(req.files.map((v) => v.filename));
