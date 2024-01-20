@@ -1,5 +1,5 @@
 const express = require('express');
-const {Post, Comment, Image, User} = require('../models');
+const {Post, Comment, Image, User, Hashtag} = require('../models');
 const {isLoggedIn} = require('./middlewares');
 const multer = require('multer');
 const path = require('path');
@@ -31,6 +31,13 @@ router.post('/', isLoggedIn, upload.none(), async(req, res, next)=>{  // POST /p
       content: req.body.content,
       UserId: req.user.id,
     });
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    if (hashtags) {
+      const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+        where: { name: tag.slice(1).toLowerCase() },
+      }))); 
+      await post.addHashtags(result.map((v) => v[0]));
+    }
     if (req.body.image) { // 이미지가 있는 경우
       if (Array.isArray(req.body.image)) { // 이미지를 여러 개 올리게 되면 req.body.image가 "[이미지1.png, 이미지2.png]" 형태로 만들어진다.
         const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
