@@ -6,7 +6,7 @@ import PostImages from './PostImages';
 import { useCallback, useState } from 'react';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 
 const PostCard = ({post}) => {
@@ -46,14 +46,23 @@ const PostCard = ({post}) => {
       data: post.id,
     })
   },[])
-  
-    
+
+  const onRetweet = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: RETWEET_REQUEST,
+      data: post.id,
+    });
+  }, [id]);  
+
   return(
     <div>
       <Card 
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key='retweet' />,
+          <RetweetOutlined key='retweet' onClick={onRetweet} />,
           liked 
             ? <HeartTwoTone key='heart' twoToneColor='#eb2f96' onClick={onUnlike} /> 
             : <HeartOutlined key='heart' onClick={onLike} /> ,
