@@ -12,6 +12,9 @@ import {
   LOAD_POSTS_FAILURE, 
   LOAD_POSTS_REQUEST, 
   LOAD_POSTS_SUCCESS, 
+  LOAD_POST_FAILURE, 
+  LOAD_POST_REQUEST, 
+  LOAD_POST_SUCCESS, 
   REMOVE_POST_FAILURE, 
   REMOVE_POST_REQUEST, 
   REMOVE_POST_SUCCESS, 
@@ -50,6 +53,7 @@ function* loadPosts(action) {
 }
 
 
+
 function addPostAPI(data){
   return axios.post('/post', data); 
 }
@@ -74,6 +78,7 @@ function* addPost(action) {
 }
 
 
+
 function addCommentAPI(data){
   return axios.post(`/post/${data.postId}/comment`,data); // POST /post/1/comment
 }
@@ -92,6 +97,7 @@ function* addComment(action){
     }) 
   }
 }
+
 
 
 function removePostAPI(data) {
@@ -118,6 +124,7 @@ function* removePost(action) {
 }
 
 
+
 function likePostAPI(data) {
   return axios.patch(`/post/${data}/like`);
 }
@@ -136,6 +143,7 @@ function* likePost(action) {
     });
   }
 }
+
 
 
 function unlikePostAPI(data) {
@@ -179,10 +187,10 @@ function* uploadImages(action) {
 }
 
 
+
 function retweetAPI(data) {
   return axios.post(`/post/${data}/retweet`);
 }
-
 function* retweet(action) {
   try {
     const result = yield call(retweetAPI, action.data);
@@ -195,6 +203,28 @@ function* retweet(action) {
     yield put({
       type: RETWEET_FAILURE,
       error: err.response.data,
+    });
+  }
+}
+
+
+
+
+function loadPostAPI(data) {
+  return axios.get(`/post/${data}`);
+}
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_POST_FAILURE,
+      data: err.response.data,
     });
   }
 }
@@ -232,6 +262,10 @@ function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
 
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 
 export default function* postSaga() {
     yield all ([
@@ -243,5 +277,6 @@ export default function* postSaga() {
       fork(watchUnlikePost),
       fork(watchUploadImages),
       fork(watchRetweet),
+      fork(watchLoadPost),
     ])
 }
