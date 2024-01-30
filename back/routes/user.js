@@ -1,8 +1,9 @@
 const express = require('express');
-const {User, Post} = require('../models');
+const {User, Post, Image, Comment} = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -208,7 +209,7 @@ router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/f
 router.get('/:userId', async (req, res, next) => { // GET /user/x
   try {
     const fullUserWithoutPassword = await User.findOne({
-      where: { id: req.params.id },
+      where: { id: req.params.userId  },
       attributes: {
         exclude: ['password']
       },
@@ -234,6 +235,51 @@ router.get('/:userId', async (req, res, next) => { // GET /user/x
     } else {
       res.status(404).json('존재하지 않는 사용자입니다.');
     }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+//===================================================================================================
+
+router.get('/:userId/posts', async (req, res, next) => { // GET /user/x/posts
+  try {
+    const where = { UserId: req.params.userId };
+    if (parseInt(req.query.lastId, 10)) { 
+      where.id = { [Op.lt]: parseInt(req.query.lastId, 10)}
+    } 
+    const posts = await Post.findAll({
+      where,
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      include: [{
+        model: User,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: Image,
+      }, {
+        model: Comment,
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+          order: [['createdAt', 'DESC']],
+        }],
+      }, {
+        model: User, 
+        as: 'Likers',
+        attributes: ['id'],
+      }, {
+        model: Post,
+        as: 'Retweet',
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+        }, {
+          model: Image,
+        }]
+      }],
+    });
+    res.status(200).json(posts);
   } catch (error) {
     console.error(error);
     next(error);

@@ -43,9 +43,16 @@ export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
 
 export const initialState = {
-  loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
+  loadUserLoading: false, // 유저 정보 가져오기 시도중
+  loadUserDone: false,
+  loadUserError: null,
+  loadMyInfoLoading: false, // 나의 정보 가져오기 시도중
   loadMyInfoDone: false,
   loadMyInfoError: null,
   followLoading: false, // 팔로우 시도중
@@ -111,7 +118,8 @@ export default (state = initialState, action) => {
         draft.followError = action.error;
         break;
 
-        
+
+
       case UNFOLLOW_REQUEST:
         draft.unfollowLoading = true;
         draft.unfollowError = null;
@@ -144,6 +152,7 @@ export default (state = initialState, action) => {
         break;
 
 
+
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;
         draft.logOutError = null;
@@ -160,6 +169,7 @@ export default (state = initialState, action) => {
         break;
 
 
+
       case SIGN_UP_REQUEST:
         draft.signUpLoading = true;
         draft.signUpError = null;
@@ -173,6 +183,7 @@ export default (state = initialState, action) => {
         draft.signUpLoading = false;
         draft.signUpError = action.error;
         break;
+
 
 
       case CHANGE_NICKNAME_REQUEST:
@@ -191,6 +202,7 @@ export default (state = initialState, action) => {
         break;
 
 
+
       case LOAD_MY_INFO_REQUEST:
         draft.loadMyInfoLoading = true;
         draft.loadMyInfoError = null;
@@ -205,6 +217,8 @@ export default (state = initialState, action) => {
         draft.loadMyInfoLoading = false;
         draft.loadMyInfoError = action.error;
         break;
+
+
 
       case LOAD_FOLLOWINGS_REQUEST:
         draft.loadFollowingsLoading = true;
@@ -237,7 +251,7 @@ export default (state = initialState, action) => {
         draft.loadFollowersError = action.error;
         break;
 
-        
+
       case REMOVE_FOLLOWER_REQUEST:
         draft.removeFollowerLoading = true;
         draft.removeFollowerError = null;
@@ -251,6 +265,23 @@ export default (state = initialState, action) => {
       case REMOVE_FOLLOWER_FAILURE:
         draft.removeFollowerLoading = false;
         draft.removeFollowerError = action.error;
+        break;
+
+
+
+      case LOAD_USER_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserError = null;
+        draft.loadUserDone = false;
+        break;
+      case LOAD_USER_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.userInfo = action.data;
+        draft.loadUserDone = true;
+        break;
+      case LOAD_USER_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
         break;
 
 
