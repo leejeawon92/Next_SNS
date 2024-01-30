@@ -8,6 +8,7 @@ const App = ({Component}) => {
     <>
       <Head>
         <meta charSet='utf-8' />
+        <link rel="shortcut icon" href="/sns_favicon.ico" />
         <title>SNS</title>
       </Head>
       <Component />
