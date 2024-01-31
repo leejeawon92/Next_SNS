@@ -11,7 +11,7 @@ const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `
 
-function AppLayout({ children }) {
+const AppLayout = ({ children }) => {
   const {me} = useSelector((state)=> state.user);
 
   return (
