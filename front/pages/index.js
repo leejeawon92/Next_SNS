@@ -14,15 +14,6 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetError} = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST
-    })
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    })
-  },[])
-
   useEffect(() => {
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
@@ -47,12 +38,12 @@ const Home = () => {
     }
   }, [retweetError]);
 
-  console.log(mainPosts);
+  console.log(mainPosts.map((post)=> console.log(post.id)));
 
   return (
     <AppLayout>
       {me && <PostForm />}
-      {mainPosts.map((post)=> <PostCard key={post.id} post={post} />)}
+      {mainPosts.map((post,index)=> <PostCard key={post.id} post={post} />)}
     </AppLayout>
   )
 }
