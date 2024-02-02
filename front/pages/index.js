@@ -47,6 +47,8 @@ const Home = () => {
     }
   }, [retweetError]);
 
+  console.log(mainPosts);
+
   return (
     <AppLayout>
       {me && <PostForm />}

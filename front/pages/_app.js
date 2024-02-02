@@ -16,7 +16,7 @@ const App = ({Component}) => {
   )
 }
 
-App.PropTypes = {
+App.propTypes = {
   Component: PropTypes.elementType.isRequired
 }
 
