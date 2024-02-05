@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import { END } from 'redux-saga';
-
 import { Avatar, Card } from 'antd';
 import AppLayout from '../components/AppLayout';
 import wrapper from '../store/configureStore';
