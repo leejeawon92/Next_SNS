@@ -29,6 +29,23 @@ app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true,
 }));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+  app.use(hpp());
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(cors({
+    origin: 'http://nextSNS.com',
+    credentials: true,
+  }));
+} else {
+  app.use(morgan('dev'));
+  app.use(cors({
+    origin: true,
+    credentials: true,
+  }));
+}
+
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
